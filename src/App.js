@@ -1,26 +1,78 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Router, Route, Switch } from 'react-router-dom';
+import history from './utils/history';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Container,
+  CssBaseline,
+  LinearProgress
+} from '@material-ui/core';
+import TopBar from './components/TopBar';
+import PlanListPage from './pages/PlanListPage';
+import PlanEditPage from './pages/PlanEditPage';
+import ResultsListPage from './pages/ResultsListPage';
+import SettingsPage from './pages/SettingsPage';
+import PrivateRoute from './components/PrivateRoute';
+import SidebarNav from './components/SidebarNav';
+import { useAuth0 } from "./react-auth0-spa";
 
-function App() {
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex'
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto'
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4)
+  },
+  fixedHeight: {
+    height: 240,
+  }
+}));
+
+const App = () => {
+  const {loading} = useAuth0(); // Todo:show loading spinner
+  const [open, setOpen] = useState(true);
+  const classes = useStyles();
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router history={history}>
+  	  <div className={classes.root}>
+        <CssBaseline />
+        <TopBar open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
+        <SidebarNav open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
+        
+        <main className={classes.content}>
+          {
+            loading ?  
+            <LinearProgress /> :
+  
+            (
+              <div>
+                <div className={classes.appBarSpacer} />
+                <Container maxWidth="lg" className={classes.container}>
+                  <Switch>
+                    <Route path='/' exact />
+                    <Route path="/plans" component={PlanListPage} />
+                    <PrivateRoute path="/addPlan" component={PlanEditPage} />
+                    <PrivateRoute path="/results" component={ResultsListPage} />
+                    <PrivateRoute path="/settings" component={SettingsPage} />
+                  </Switch>
+                </Container>
+              </div>
+            )
+          }
+        </main>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
