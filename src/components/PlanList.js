@@ -16,8 +16,12 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add'
-import { useAuth0 } from "../react-auth0-spa";
+import {
+  Add,
+  Visibility
+} from '@material-ui/icons'
+import { useAuth0 } from '../react-auth0-spa';
+import ApiRequests from '../utils/api-requests';
 
 const useStyles = makeStyles({
   table: {
@@ -49,29 +53,21 @@ const EnhancedTableToolbar = (props) => {
       </Typography>
       
       <IconButton href="/addPlan" aria-label="filter list">
-        <AddIcon />
+        <Add />
       </IconButton>
     </Toolbar>
   );
 };
 
 const PlanList = (props) => {
-  const {user, loading, getTokenSilently} = useAuth0(); 
+  const {user, loading} = useAuth0(); 
 	const classes = useStyles();
 	const [plans, setPlans] = useState([]);
 	const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
 	const getPlans = async () => {
-    const token = await getTokenSilently();
-    const requestBody = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-		const response = await fetch(`http://localhost:8080/plans`, requestBody).catch(e => console.log(e))
-		const thePlans = await response.json();
-		setPlans(thePlans);
+		setPlans(await ApiRequests(`/plans`));
 	}
 
 	useEffect(() => {
@@ -99,6 +95,7 @@ const PlanList = (props) => {
     	          <TableCell>Name</TableCell>
     	          <TableCell align="right">User Id</TableCell>
     	          <TableCell align="right">Private</TableCell>
+                <TableCell> </TableCell>
     	        </TableRow>
     	      </TableHead>
     	      <TableBody>
@@ -107,8 +104,13 @@ const PlanList = (props) => {
     	            <TableCell component="th" scope="row">
     	              {plan.name}
     	            </TableCell>
-    	            <TableCell align="right">{plan.userId}</TableCell>
+    	            <TableCell align="right">{plan.userName || plan.userId}</TableCell>
     	            <TableCell align="right">{plan.private ? 'Yes' : 'No'}</TableCell>
+                  <TableCell>
+                    <IconButton href={`/planView/${plan.id}`}>
+                      <Visibility />
+                    </IconButton>
+                  </TableCell>
     	          </TableRow>
     	        ))}
     	      </TableBody>

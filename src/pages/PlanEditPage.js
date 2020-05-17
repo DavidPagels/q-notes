@@ -9,6 +9,7 @@ import {
 	TextField
 } from '@material-ui/core';
 import { useAuth0 } from "../react-auth0-spa";
+import ApiRequests from '../utils/api-requests';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,11 +30,10 @@ const PlanEditPage = (props) => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Authorization': user.sub
 			},
 			body: JSON.stringify({name: planName, private: isPrivate})
 		}
-		const response = await fetch(`http://localhost:8080/plans`, requestBody);
+		const response = await ApiRequests(`/plans`, requestBody);
 		props.history.push('/plans')
 		
 	}

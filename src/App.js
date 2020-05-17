@@ -10,6 +10,7 @@ import {
 import TopBar from './components/TopBar';
 import PlanListPage from './pages/PlanListPage';
 import PlanEditPage from './pages/PlanEditPage';
+import PlanViewPage from './pages/PlanViewPage';
 import ResultsListPage from './pages/ResultsListPage';
 import SettingsPage from './pages/SettingsPage';
 import PrivateRoute from './components/PrivateRoute';
@@ -64,6 +65,7 @@ const App = () => {
                     <PrivateRoute path="/addPlan" component={PlanEditPage} />
                     <PrivateRoute path="/results" component={ResultsListPage} />
                     <PrivateRoute path="/settings" component={SettingsPage} />
+                    <PrivateRoute path="/planView/:id" component={PlanViewPage} />
                   </Switch>
                 </Container>
               </div>
