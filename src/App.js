@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import history from './utils/history';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -39,41 +39,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App = () => {
-  const {loading} = useAuth0(); // Todo:show loading spinner
+  const {loading} = useAuth0();
   const [open, setOpen] = useState(true);
   const classes = useStyles();
   
   return (
-    <Router history={history}>
+    <BrowserRouter history={history}>
   	  <div className={classes.root}>
         <CssBaseline />
         <TopBar open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
         <SidebarNav open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
-        
         <main className={classes.content}>
-          {
-            loading ?  
+          <div className={classes.appBarSpacer} />
+          { 
+            loading ? 
             <LinearProgress /> :
-  
-            (
-              <div>
-                <div className={classes.appBarSpacer} />
-                <Container maxWidth="lg" className={classes.container}>
-                  <Switch>
-                    <Route path='/' exact />
-                    <Route path="/plans" component={PlanListPage} />
-                    <PrivateRoute path="/addPlan" component={PlanEditPage} />
-                    <PrivateRoute path="/results" component={ResultsListPage} />
-                    <PrivateRoute path="/settings" component={SettingsPage} />
-                    <PrivateRoute path="/planView/:id" component={PlanViewPage} />
-                  </Switch>
-                </Container>
-              </div>
-            )
+            <Container maxWidth="lg" className={classes.container}>
+              <Switch>
+                <Route path='/' exact />
+                <Route path="/plans" component={PlanListPage} />
+                <PrivateRoute path="/addPlan" component={PlanEditPage} />
+                <PrivateRoute path="/results" component={ResultsListPage} />
+                <PrivateRoute path="/settings" component={SettingsPage} />
+                <PrivateRoute path="/planView/:id" component={PlanViewPage} />
+              </Switch>
+            </Container>
           }
         </main>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 };
 

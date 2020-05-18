@@ -8,8 +8,7 @@ import {
 	Paper,
 	TextField
 } from '@material-ui/core';
-import { useAuth0 } from "../react-auth0-spa";
-import ApiRequests from '../utils/api-requests';
+import {postApiRequest} from '../utils/api-requests';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,20 +21,12 @@ const PlanEditPage = (props) => {
 	const classes = useStyles();
 	const [isPrivate, setIsPrivate] = React.useState(false);
 	const [planName, setPlanName] = React.useState();
-	const {user} = useAuth0(); 
 
 	const addPlan = async e => {
 		e.preventDefault()
-		const requestBody = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({name: planName, private: isPrivate})
-		}
-		const response = await ApiRequests(`/plans`, requestBody);
+		const requestBody = {name: planName, private: isPrivate};
+		await postApiRequest(`/plans`, requestBody);
 		props.history.push('/plans')
-		
 	}
 
 	return (

@@ -19,17 +19,10 @@ import {
 import {
   Add,
   Visibility
-} from '@material-ui/icons'
-import { useAuth0 } from '../react-auth0-spa';
-import ApiRequests from '../utils/api-requests';
+} from '@material-ui/icons';
+import {getApiRequest} from '../utils/api-requests';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650
-  }
-});
-
-const useToolbarStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
@@ -41,38 +34,24 @@ const useToolbarStyles = makeStyles((theme) => ({
   title: {
     flex: '1 1 100%',
   },
+  table: {
+    minWidth: 650
+  }
 }));
 
-const EnhancedTableToolbar = (props) => {
-		const classes = useToolbarStyles();
-
-  return (
-    <Toolbar className={classes.root}>
-      <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-        Smoking Plans
-      </Typography>
-      
-      <IconButton href="/addPlan" aria-label="filter list">
-        <Add />
-      </IconButton>
-    </Toolbar>
-  );
-};
-
 const PlanList = (props) => {
-  const {user, loading} = useAuth0(); 
 	const classes = useStyles();
 	const [plans, setPlans] = useState([]);
 	const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
 	const getPlans = async () => {
-		setPlans(await ApiRequests(`/plans`));
+		setPlans(await getApiRequest(`/plans?page=${page}&pageSize=${rowsPerPage}`));
 	}
 
 	useEffect(() => {
 		getPlans();
-	}, []);
+	}, [plans, page, rowsPerPage]);
 
 	const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -86,7 +65,15 @@ const PlanList = (props) => {
 	return (
 		<div className={classes.root}>
       <Paper className={classes.paper}>
-			  <EnhancedTableToolbar />
+        <Toolbar className={classes.root}>
+          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+            Smoking Plans
+          </Typography>
+          
+          <IconButton href="/addPlan" aria-label="filter list">
+            <Add />
+          </IconButton>
+        </Toolbar>
   
     	  <TableContainer component={Paper}>
     	    <Table className={classes.table} aria-label="simple table">
