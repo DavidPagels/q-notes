@@ -14,6 +14,7 @@ import ResultsListPage from './pages/ResultsListPage';
 import SettingsPage from './pages/SettingsPage';
 import PrivateRoute from './components/PrivateRoute';
 import SidebarNav from './components/SidebarNav';
+import HeaterMeterGraph from './components/HeaterMeterGraph';
 import { useAuth0 } from "./react-auth0-spa";
 
 const drawerWidth = 240;
@@ -59,7 +60,7 @@ const App = () => {
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
                   <Switch>
-                    <Route path='/' exact />
+                    <Route path='/' exact component={HeaterMeterGraph}/>
                     <Route path="/plans" component={PlanListPage} />
                     <PrivateRoute path="/addPlan" component={PlanEditPage} />
                     <PrivateRoute path="/results" component={ResultsListPage} />
