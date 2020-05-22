@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import history from './utils/history';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,14 +8,17 @@ import {
   LinearProgress
 } from '@material-ui/core';
 import TopBar from './components/TopBar';
+import MainPage from './pages/MainPage';
 import PlanListPage from './pages/PlanListPage';
 import PlanEditPage from './pages/PlanEditPage';
-import PlanViewPage from './pages/PlanViewPage';
+import PlanPage from './pages/PlanPage';
 import ResultsListPage from './pages/ResultsListPage';
 import SettingsPage from './pages/SettingsPage';
+import SettingsEditPage from './pages/SettingsEditPage';
 import PrivateRoute from './components/PrivateRoute';
 import SidebarNav from './components/SidebarNav';
-import { useAuth0 } from "./react-auth0-spa";
+import HeaterMeterGraph from './components/HeaterMeterGraph';
+import { useAuth0 } from './providers/Auth0';
 
 const drawerWidth = 240;
 
@@ -40,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const App = () => {
   const {loading} = useAuth0();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
   
   return (
@@ -54,14 +57,17 @@ const App = () => {
           { 
             loading ? 
             <LinearProgress /> :
-            <Container maxWidth="lg" className={classes.container}>
+            <Container maxWidth='lg' className={classes.container}>
               <Switch>
-                <Route path='/' exact />
-                <Route path="/plans" component={PlanListPage} />
-                <PrivateRoute path="/addPlan" component={PlanEditPage} />
-                <PrivateRoute path="/results" component={ResultsListPage} />
-                <PrivateRoute path="/settings" component={SettingsPage} />
-                <PrivateRoute path="/planView/:id" component={PlanViewPage} />
+                <Route path='/' component={MainPage} exact />
+                <PrivateRoute path='/newPlan' component={PlanEditPage} />
+                <PrivateRoute path='/editPlan/:planId' component={PlanEditPage} />
+                <PrivateRoute path='/copyPlan/:planId' component={PlanEditPage} />
+                <PrivateRoute path='/heaterMeter' component={HeaterMeterGraph} />
+                <PrivateRoute path='/settings' component={SettingsPage} />
+                <Route path='/results' component={ResultsListPage} />
+                <Route path='/plans/:planId' component={PlanPage} />
+                <Route path='/plans' component={PlanListPage} />
               </Switch>
             </Container>
           }

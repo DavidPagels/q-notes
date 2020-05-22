@@ -10,7 +10,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Toolbar,
   Typography,
@@ -37,12 +36,12 @@ const StepList = props => {
 	return (
     <div>
       <Toolbar className={classes.root}>
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+        <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
           Steps
         </Typography>
       </Toolbar>
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table} aria-label='simple table'>
           <TableBody>
             {steps.map((step) => (
               <TableRow key={step.id}>

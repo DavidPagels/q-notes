@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  IconButton,
   Toolbar,
   Typography,
 	Paper
 } from '@material-ui/core';
-import {FileCopy} from '@material-ui/icons';
-import { useApi } from '../providers/Api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,27 +13,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const SettingsPage = (props) => {
+const MainPage = (props) => {
 	const classes = useStyles();
-  const { userId } = useParams();
-
-  useEffect(() => {
-  }, []);
 
 	return (
 		<div className={classes.root}>
       <Paper className={classes.paper}>
         <Toolbar className={classes.root}>
           <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
-            {userId}
+            Welcome to Q Notes!
           </Typography>
-          <IconButton href={`/copyPlan/${userId}`}>
-            <FileCopy />
-          </IconButton>
         </Toolbar>
 			</Paper>
 		</div>
 	);
 };
 
-export default SettingsPage;
+export default MainPage;

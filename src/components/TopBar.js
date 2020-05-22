@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { useAuth0 } from "../react-auth0-spa";
+import {
+  AppBar, 
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography
+} from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu'
+import { useAuth0 } from '../providers/Auth0';
 
 const useStyles = makeStyles(theme => ({
 	appBar: {
@@ -26,40 +31,80 @@ const useStyles = makeStyles(theme => ({
     })
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: 36
   },
   menuButtonHidden: {
-    display: 'none',
+    display: 'none'
   },
   title: {
     flexGrow: 1,
+    textDecoration: 'none'
   },
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
+  },
+  userIcon: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    borderRadius: '25%'
+  },
+  userName: {
+    paddingRight: theme.spacing(1)
   }
 }));
 
 const TopBar = props => {
 	const classes = useStyles(props);
-	const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuOpen = ev => {
+    setAnchorEl(ev.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  }
+
+  const renderUserMenu = () => {
+    return (
+      <div>
+        <Button color='inherit' aria-controls="simple-menu" aria-haspopup="true" onClick={handleMenuOpen}>
+          <div color='inherit' className={classes.userName}>
+            {user.name}
+          </div>
+          <img src={user.picture} className={classes.userIcon}/>
+        </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={ev => logout() && handleMenuClose(ev)}>Logout</MenuItem>
+        </Menu>
+      </div>
+    );
+  }
 
 	return (
-		<AppBar position="absolute" className={clsx(classes.appBar, props.open && classes.appBarShift)}>
+		<AppBar position='absolute' className={clsx(classes.appBar, props.open && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>
         <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
+          edge='start'
+          color='inherit'
+          aria-label='open drawer'
           onClick={() => props.setOpen(true)}
           className={clsx(classes.menuButton, props.open && classes.menuButtonHidden)}
         >
           <MenuIcon />
         </IconButton>
-        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-          Dashboard
+        <Typography {...{to: '/'}} component={'h1', Link} variant='h6' className={classes.title} color='inherit' noWrap>
+          Q Notes
         </Typography>
-        {isAuthenticated ? 
-          <Button color='inherit' onClick={() => logout()}>Log out</Button> :
+        {isAuthenticated && user ? 
+          renderUserMenu() :
         	<Button color='inherit' onClick={() => loginWithRedirect({})}>Log in</Button>
     		}
       </Toolbar>

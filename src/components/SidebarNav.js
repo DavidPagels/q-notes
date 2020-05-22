@@ -1,17 +1,23 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import NoteIcon from '@material-ui/icons/Note';
-import RestaurantIcon from '@material-ui/icons/Restaurant';
-import SettingsIcon from '@material-ui/icons/Settings';
-import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
+import {
+  ChevronLeft,
+  Note,
+  Restaurant,
+  Router,
+  Settings
+} from '@material-ui/icons';
+import { 
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   drawerPaper: {
@@ -48,7 +54,7 @@ const SidebarNav = props => {
 
   return (
     <Drawer
-          variant="permanent"
+          variant='permanent'
           classes={{
             paper: clsx(classes.drawerPaper, !props.open && classes.drawerPaperClose),
           }}
@@ -56,28 +62,34 @@ const SidebarNav = props => {
         >
       <div className={classes.toolbarIcon}>
         <IconButton onClick={() => props.setOpen(false)}>
-          <ChevronLeftIcon />
+          <ChevronLeft />
         </IconButton>
       </div>
       <Divider />
       <List>
-        <ListItem button component='a' href='/plans'>
+        <ListItem button {...{to: '/plans'}} component={NavLink}>
           <ListItemIcon>
-            <NoteIcon />
+            <Note />
           </ListItemIcon>
-          <ListItemText primary="Plans" />
+          <ListItemText primary='Plans' />
         </ListItem>
-        <ListItem button component='a' href='/results'>
+        <ListItem button {...{to: '/heaterMeter'}} component={NavLink}>
           <ListItemIcon>
-            <RestaurantIcon />
+            <Router />
           </ListItemIcon>
-          <ListItemText primary="Results" />
+          <ListItemText primary='Heater Meter' />
         </ListItem>
-        <ListItem button component='a' href='/settings'>
+        <ListItem button {...{to: '/results'}} component={NavLink}>
           <ListItemIcon>
-            <SettingsIcon />
+            <Restaurant />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText primary='Results' />
+        </ListItem>
+        <ListItem button {...{to: '/settings'}} component={NavLink}>
+          <ListItemIcon>
+            <Settings />
+          </ListItemIcon>
+          <ListItemText primary='Settings' />
         </ListItem>
       </List>
     </Drawer>

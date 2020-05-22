@@ -8,34 +8,38 @@ import {
 	Paper,
 	TextField
 } from '@material-ui/core';
-import {postApiRequest} from '../utils/api-requests';
+import { useApi } from '../providers/Api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
+  },
+  paper: {
+    padding: theme.spacing(2)
   }
 }));
 
 const PlanEditPage = (props) => {
 	const classes = useStyles();
+  const { postRequest } = useApi();
 	const [isPrivate, setIsPrivate] = React.useState(false);
 	const [planName, setPlanName] = React.useState();
 
 	const addPlan = async e => {
-		e.preventDefault()
+		e.preventDefault();
 		const requestBody = {name: planName, private: isPrivate};
-		await postApiRequest(`/plans`, requestBody);
-		props.history.push('/plans')
+		await postRequest(`/plans`, requestBody);
+		props.history.push('/plans');
 	}
 
 	return (
 		<div className={classes.root}>
       <Paper className={classes.paper}>
         <form onSubmit={addPlan} noValidate>
-          <Grid container alignItems="flex-start" spacing={2}>
+          <Grid container alignItems='flex-start' spacing={2}>
             <Grid item xs={6}>
-              <TextField id="filled-basic" label='Plan Name' onChange={e => setPlanName(e.target.value)} variant="filled"/>
+              <TextField id='filled-basic' label='Plan Name' onChange={e => setPlanName(e.target.value)} variant='filled'/>
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
@@ -43,18 +47,18 @@ const PlanEditPage = (props) => {
       				    <Checkbox
       				      checked={isPrivate}
       				      onChange={e => setIsPrivate(e.target.checked)}
-      				      name="isPrivate"
-      				      color="primary"
+      				      name='isPrivate'
+      				      color='primary'
       				    />
       				  }
-      				  label="Private (plans marked as private will only be visible to you)"
+      				  label='Private (plans marked as private will only be visible to you)'
       				/>
             </Grid>
             <Grid item style={{ marginTop: 16 }}>
               <Button
-                variant="contained"
-                color="primary"
-                type="submit"
+                variant='contained'
+                color='primary'
+                type='submit'
               >
                 Submit
               </Button>

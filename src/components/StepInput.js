@@ -10,7 +10,6 @@ const useStyles = makeStyles(theme => ({
   inputContainer: {
     padding: theme.spacing(1)
   }
-
 }));
 
 const StepInput = props => {
@@ -29,7 +28,7 @@ const StepInput = props => {
     <Grid container className={classes.inputContainer}>
       <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
         <TextField
-          placeholder="Input next step"
+          placeholder='Input next step'
           value={action}
           onChange={ev => setAction(ev.target.value)}
           fullWidth
@@ -38,8 +37,8 @@ const StepInput = props => {
       <Grid xs={2} md={1} item>
         <Button
           fullWidth
-          color="secondary"
-          variant="outlined"
+          color='secondary'
+          variant='outlined'
           onClick={() => addStep()}
         >
           Add

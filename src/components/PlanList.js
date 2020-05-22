@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { 
   lighten, 
   makeStyles 
@@ -20,7 +21,8 @@ import {
   Add,
   Visibility
 } from '@material-ui/icons';
-import {getApiRequest} from '../utils/api-requests';
+import { useApi } from '../providers/Api';
+import * as qs from 'qs';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,60 +43,75 @@ const useStyles = makeStyles(theme => ({
 
 const PlanList = (props) => {
 	const classes = useStyles();
+  const history = useHistory();
+  const { getRequest } = useApi();
+  const queryParams = qs.parse(history.location.search);
 	const [plans, setPlans] = useState([]);
-	const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+	const [page, setPage] = React.useState(Number(queryParams.page) || 1);
+  const [pageSize, setPageSize] = React.useState(Number(queryParams.pageSize) || 10);
+  const [totalHits, setTotalHits] = React.useState(0);
 
 	const getPlans = async () => {
-		setPlans(await getApiRequest(`/plans?page=${page}&pageSize=${rowsPerPage}`));
+    const queryString = qs.stringify({page, pageSize});
+		const results = await getRequest(`/plans?${queryString}`);
+    setPlans(results.records);
+    setTotalHits(results.totalHits);
 	}
 
 	useEffect(() => {
 		getPlans();
-	}, [plans, page, rowsPerPage]);
+	}, [page, pageSize]);
+
+  const updatePage = (newPage, newPageSize) => {
+    history.push({
+      pathname: history.location.pathname, 
+      search: `?${qs.stringify({page: newPage, pageSize: newPageSize})}`
+    });
+    setPage(newPage);
+    setPageSize(newPageSize);
+  };
 
 	const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    updatePage(newPage, pageSize);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    updatePage(1, parseInt(event.target.value, 10));
   };
 
 	return (
 		<div className={classes.root}>
       <Paper className={classes.paper}>
         <Toolbar className={classes.root}>
-          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+          <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
             Smoking Plans
           </Typography>
           
-          <IconButton href="/addPlan" aria-label="filter list">
+          <IconButton href='/addPlan' aria-label='filter list'>
             <Add />
           </IconButton>
         </Toolbar>
   
     	  <TableContainer component={Paper}>
-    	    <Table className={classes.table} aria-label="simple table">
+    	    <Table className={classes.table} aria-label='simple table'>
     	      <TableHead>
     	        <TableRow>
     	          <TableCell>Name</TableCell>
-    	          <TableCell align="right">User Id</TableCell>
-    	          <TableCell align="right">Private</TableCell>
+    	          <TableCell align='right'>User Id</TableCell>
+    	          <TableCell align='right'>Private</TableCell>
                 <TableCell> </TableCell>
     	        </TableRow>
     	      </TableHead>
     	      <TableBody>
     	        {plans.map((plan) => (
     	          <TableRow key={plan.id}>
-    	            <TableCell component="th" scope="row">
+    	            <TableCell component='th' scope='row'>
     	              {plan.name}
     	            </TableCell>
-    	            <TableCell align="right">{plan.userName || plan.userId}</TableCell>
-    	            <TableCell align="right">{plan.private ? 'Yes' : 'No'}</TableCell>
+    	            <TableCell align='right'>{plan.userName || plan.userId}</TableCell>
+    	            <TableCell align='right'>{plan.private ? 'Yes' : 'No'}</TableCell>
                   <TableCell>
-                    <IconButton href={`/planView/${plan.id}`}>
+                    <IconButton {...{to: `/plans/${plan.id}`}} component={Link}>
                       <Visibility />
                     </IconButton>
                   </TableCell>
@@ -104,11 +121,11 @@ const PlanList = (props) => {
     	    </Table>
     	  </TableContainer>
     	  <TablePagination
-    	  	  rowsPerPageOptions={[5, 10, 25]}
-    	  	  component="div"
-    	  	  count={plans.length}
-    	  	  rowsPerPage={rowsPerPage}
-    	  	  page={page}
+    	  	  rowsPerPageOptions={[10, 25, 50]}
+    	  	  component='div'
+    	  	  count={totalHits}
+    	  	  rowsPerPage={pageSize}
+    	  	  page={page - 1}
     	  	  onChangePage={handleChangePage}
     	  	  onChangeRowsPerPage={handleChangeRowsPerPage}
     	  	/>

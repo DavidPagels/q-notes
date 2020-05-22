@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   IconButton,
@@ -8,7 +8,7 @@ import {
 	Paper
 } from '@material-ui/core';
 import {FileCopy} from '@material-ui/icons';
-import {getApiRequest, postApiRequest, deleteApiRequest} from '../utils/api-requests';
+import { useApi } from '../providers/Api';
 
 import StepList from '../components/StepList';
 import StepInput from '../components/StepInput';
@@ -20,28 +20,29 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const PlanViewPage = (props) => {
+const PlanPage = (props) => {
 	const classes = useStyles();
-  const {id} = useParams();
+  const { getRequest, postRequest, deleteRequest } = useApi();
+  const {planId} = useParams();
 
   const [plan, setPlan] = useState({});
   const [steps, setSteps] = useState([]);
 
   const getPlan = async () => {
-    setPlan(await getApiRequest(`/plans/${id}`));
+    setPlan(await getRequest(`/plans/${planId}`));
   };
 
   const getSteps = async () => {
-    setSteps(await getApiRequest(`/plans/${id}/steps`));
+    setSteps(await getRequest(`/plans/${planId}/steps`));
   };
 
   const addStep = async step => {
-    await postApiRequest(`/plans/${id}/steps`, [step]);
+    await postRequest(`/plans/${planId}/steps`, [step]);
     return getSteps();
   }
 
   const deleteStep = async stepId => {
-    await deleteApiRequest(`/plans/${id}/steps/${stepId}`);
+    await deleteRequest(`/plans/${planId}/steps/${stepId}`);
     return getSteps();
   }
 
@@ -55,10 +56,10 @@ const PlanViewPage = (props) => {
 		<div className={classes.root}>
       <Paper className={classes.paper}>
         <Toolbar className={classes.root}>
-          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+          <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
             {plan.name}
           </Typography>
-          <IconButton href="/newPlan">
+          <IconButton {...{to: `/copyPlan/${planId}`}} component={Link}>
             <FileCopy />
           </IconButton>
         </Toolbar>
@@ -69,4 +70,4 @@ const PlanViewPage = (props) => {
 	);
 };
 
-export default PlanViewPage;
+export default PlanPage;
