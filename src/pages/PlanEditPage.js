@@ -1,73 +1,85 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-	Button,
-	Checkbox,
-	FormControlLabel,
-	Grid,
-	Paper,
-	TextField
-} from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import PaperContainer from '../components/PaperContainer'
+import PlanEdit from '../components/PlanEdit';
+import StepList from '../components/StepList';
+import StepInput from '../components/StepInput';
 import { useApi } from '../providers/Api';
+import { useSnackbar } from '../providers/Snackbar';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+  title: {
+    paddingBottom: theme.spacing(2)
   },
-  paper: {
-    padding: theme.spacing(2)
+  stepList: {
+    width: '100%'
+  },
+  stepInput: {
+    width: '100%'
   }
 }));
 
 const PlanEditPage = (props) => {
 	const classes = useStyles();
-  const { postRequest } = useApi();
-	const [isPrivate, setIsPrivate] = React.useState(false);
-	const [planName, setPlanName] = React.useState();
+  const history = useHistory();
+  const { planId } = useParams();
+  const [ plan, setPlan ] = useState({});
+  const [ loading, setLoading ] = useState(true);
+  const { showSnackbar } = useSnackbar();
+  const { getRequest, postRequest, putRequest, deleteRequest } = useApi();
 
-	const addPlan = async e => {
-		e.preventDefault();
-		const requestBody = {name: planName, private: isPrivate};
-		await postRequest(`/plans`, requestBody);
-		props.history.push('/plans');
+  const init = async () => {
+    await getPlan();
+    setLoading(false);
+  }
+
+  const getPlan = async () => {
+    setPlan(await getRequest(`/plans/${planId}`));
+  };
+
+	const editPlan = async plan => {
+		const requestBody = {name: plan.name, private: plan.isPrivate};
+		await putRequest(`/plans/${planId}`, requestBody);
+    showSnackbar('Plan Saved');
+		history.push(`/plans/${planId}`);
 	}
 
-	return (
-		<div className={classes.root}>
-      <Paper className={classes.paper}>
-        <form onSubmit={addPlan} noValidate>
-          <Grid container alignItems='flex-start' spacing={2}>
-            <Grid item xs={6}>
-              <TextField id='filled-basic' label='Plan Name' onChange={e => setPlanName(e.target.value)} variant='filled'/>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-      				  control={
-      				    <Checkbox
-      				      checked={isPrivate}
-      				      onChange={e => setIsPrivate(e.target.checked)}
-      				      name='isPrivate'
-      				      color='primary'
-      				    />
-      				  }
-      				  label='Private (plans marked as private will only be visible to you)'
-      				/>
-            </Grid>
-            <Grid item style={{ marginTop: 16 }}>
-              <Button
-                variant='contained'
-                color='primary'
-                type='submit'
-              >
-                Submit
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-			</Paper>
-		</div>
-	);
+  const addStep = async step => {
+    await postRequest(`/plans/${planId}/steps`, [step]);
+    return getPlan();
+  }
+
+  const deleteStep = async stepId => {
+    await deleteRequest(`/plans/${planId}/steps/${stepId}`);
+    return getPlan();
+  }
+
+  useEffect(() => {
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+	return loading ? '' :
+      <div>
+        <PaperContainer>
+          <Typography className={classes.title} variant='h6'>
+            Edit Plan
+          </Typography>
+          <PlanEdit plan={plan} onPlanSubmit={editPlan} planId={planId} />
+        </PaperContainer>
+        <PaperContainer>
+          <Typography className={classes.title} variant='h6'>
+            Modify Plan Steps
+          </Typography>
+          <StepList 
+              className={classes.stepList} 
+              deleteStep={deleteStep} 
+              steps={plan.steps || []}/>
+          <StepInput className={classes.stepInput} addStep={addStep} />
+        </PaperContainer>
+      </div>;
 };
 
 export default PlanEditPage;

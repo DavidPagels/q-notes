@@ -1,37 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Paper } from '@material-ui/core';
-import {Line} from 'react-chartjs-2';
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 
 const HeaterMeterGraph = (props) => {
-	const heaterMeterUrl = 'http://68.46.34.69'
-
-	const [hmData, setHmData] = useState();
-
-	const extractData = csvRow => {
-		const cols = csvRow.split(',');
-		const [timestamp, setpoint, probe0, probe1, probe2, probe3, pidOut] = cols;
-		return {time: new Date(Number(timestamp) * 1000), setpoint, probe0, probe1, probe2, probe3, pidOut};
-	}
-
-	const getHeaterMeterData = async () => {
-		const url = `${heaterMeterUrl}/luci/lm/hist`;
-		const resp = await fetch(url);
-		if (resp.ok) {
-			const respText = await resp.text();
-			const csvRows = respText.split('\n').filter(row => row);
-			setHmData(csvRows.map(extractData));
-		}
-	};
-
-	useEffect(() => {
-		getHeaterMeterData();
-	}, []);
 
 	const data = {
 	  datasets: [{
 	  	label: 'Setpoint',
 	  	yAxisID: 'temp-axis',
-	    data: hmData && hmData.map(d => ({x: d.time, y: Number(d.setpoint) || 0})),
+	    data: props.hmData && props.hmData.filter(d => Number(d.setpoint)).map(d => ({x: d.time, y: Number(d.setpoint) || 0})),
 	    borderWidth: 1,
 	    showLine: true,
 	    fill: false,
@@ -41,7 +17,7 @@ const HeaterMeterGraph = (props) => {
 	  {
 	  	label: 'Pit',
 	  	yAxisID: 'temp-axis',
-	    data: hmData && hmData.map(d => ({x: d.time, y: Number(d.probe0) || 0})),
+	    data: props.hmData && props.hmData.filter(d => Number(d.probe0)).map(d => ({x: d.time, y: Number(d.probe0) || 0})),
 	    borderWidth: 3,
 	    showLine: true,
 	    fill: false,
@@ -51,7 +27,7 @@ const HeaterMeterGraph = (props) => {
 	  {
 	  	label: 'Probe 1',
 	  	yAxisID: 'temp-axis',
-	    data: hmData && hmData.map(d => ({x: d.time, y: Number(d.probe1) || 0})),
+	    data: props.hmData && props.hmData.filter(d => Number(d.probe1)).map(d => ({x: d.time, y: Number(d.probe1) || 0})),
 	    borderWidth: 2,
 	    showLine: true,
 	    fill: false,
@@ -61,7 +37,7 @@ const HeaterMeterGraph = (props) => {
 	  {
 	  	label: 'Probe 2',
 	  	yAxisID: 'temp-axis',
-	    data: hmData && hmData.map(d => ({x: d.time, y: Number(d.probe2) || 0})),
+	    data: props.hmData && props.hmData.filter(d => Number(d.probe2)).map(d => ({x: d.time, y: Number(d.probe2) || 0})),
 	    borderWidth: 2,
 	    showLine: true,
 	    fill: false,
@@ -71,7 +47,7 @@ const HeaterMeterGraph = (props) => {
 	  {
 	  	label: 'Probe 3',
 	  	yAxisID: 'temp-axis',
-	    data: hmData && hmData.map(d => ({x: d.time, y: Number(d.probe3) || 0})),
+	    data: props.hmData && props.hmData.filter(d => Number(d.probe3)).map(d => ({x: d.time, y: Number(d.probe3) || 0})),
 	    borderWidth: 2,
 	    showLine: true,
 	    fill: false,
@@ -81,7 +57,7 @@ const HeaterMeterGraph = (props) => {
 	  {
 	  	label: 'PID Output',
 	  	yAxisID: 'percent-axis',
-	    data: hmData && hmData.map(d => ({x: d.time, y: Number(d.pidOut) || 0})),
+	    data: props.hmData && props.hmData.filter(d => Number(d.pidOut)).map(d => ({x: d.time, y: Number(d.pidOut) || 0})),
 	    borderWidth: 1,
 	    showLine: true,
 	    fill: true,
@@ -95,7 +71,8 @@ const HeaterMeterGraph = (props) => {
 	    xAxes: [{
 	      type: 'time',
 	      gridLines: {
-	        display: false,
+	      	color: '#CCC',
+	      	display: true
 	      }
 	    }],
 	    yAxes: [
@@ -124,18 +101,11 @@ const HeaterMeterGraph = (props) => {
 	      position: 'right'
 	    }]
 	  },
-	  maintainAspectRatio: false,
+	  maintainAspectRatio: true,
 	  legend: {display: false}
 	};
-	console.log(hmData)
 
-	return (
-	  <div className="App">
-	    <Paper>
-	      <Line id='log-chart' data={data} options={options}/>
-	    </Paper>
-	  </div>
-	);
+	return <Line id='log-chart' data={data} options={options}/>;
 };
 
 export default HeaterMeterGraph;

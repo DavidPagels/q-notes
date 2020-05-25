@@ -1,13 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
+import { useAuth0 } from '../providers/Auth0';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   ChevronLeft,
-  Note,
   Restaurant,
   Router,
-  Settings
+  Settings,
+  BugReport
 } from '@material-ui/icons';
 import { 
   Divider,
@@ -16,11 +17,13 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  Tooltip
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   drawerPaper: {
+    background: theme.palette.secondary, //'#282923',
     position: 'relative',
     whiteSpace: 'nowrap',
     width: props => props.drawerWidth,
@@ -49,8 +52,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const NAV_LINKS = [
+  {icon: Restaurant, title: 'Plans', linkOpts: {to: '/plans'}},
+  {icon: Router, title: 'HeaterMeter', linkOpts: {to: '/heaterMeter'}, requireAuth: true},
+  {icon: Settings, title: 'Settings', linkOpts: {to: '/settings'}, requireAuth: true},
+  {icon: BugReport, title: 'Bugs and Feedback', linkOpts: {to: '/bugs'}, requireAuth: true}
+];
+
 const SidebarNav = props => {
   const classes = useStyles(props);
+  const {isAuthenticated} = useAuth0();
+
+  const getNavLink = navLink => {
+    const contents = (
+      <ListItem button {...navLink.linkOpts} component={NavLink}>
+        <ListItemIcon>
+          <navLink.icon />
+        </ListItemIcon>
+        <ListItemText primary={navLink.title} />
+      </ListItem>
+    );
+    return props.open ? contents : <Tooltip key={navLink.title} title={navLink.title}>{contents}</Tooltip>;
+  };
 
   return (
     <Drawer
@@ -67,30 +90,7 @@ const SidebarNav = props => {
       </div>
       <Divider />
       <List>
-        <ListItem button {...{to: '/plans'}} component={NavLink}>
-          <ListItemIcon>
-            <Note />
-          </ListItemIcon>
-          <ListItemText primary='Plans' />
-        </ListItem>
-        <ListItem button {...{to: '/heaterMeter'}} component={NavLink}>
-          <ListItemIcon>
-            <Router />
-          </ListItemIcon>
-          <ListItemText primary='Heater Meter' />
-        </ListItem>
-        <ListItem button {...{to: '/results'}} component={NavLink}>
-          <ListItemIcon>
-            <Restaurant />
-          </ListItemIcon>
-          <ListItemText primary='Results' />
-        </ListItem>
-        <ListItem button {...{to: '/settings'}} component={NavLink}>
-          <ListItemIcon>
-            <Settings />
-          </ListItemIcon>
-          <ListItemText primary='Settings' />
-        </ListItem>
+        {NAV_LINKS.filter(navLink => isAuthenticated || !navLink.requireAuth).map(getNavLink)}
       </List>
     </Drawer>
   );

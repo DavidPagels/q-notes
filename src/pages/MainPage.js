@@ -1,31 +1,28 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import PaperContainer from '../components/PaperContainer';
 import {
-  Toolbar,
-  Typography,
-	Paper
+  Typography
 } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  }
-}));
-
 const MainPage = (props) => {
-	const classes = useStyles();
 
 	return (
-		<div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Toolbar className={classes.root}>
-          <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
-            Welcome to Q Notes!
-          </Typography>
-        </Toolbar>
-			</Paper>
-		</div>
+    <PaperContainer>
+      <Typography variant='h4'>
+        Welcome to Q Notes!
+      </Typography>
+      <Typography variant='subtitle1'>
+        A place to take and share notes about barbecueing
+      </Typography>
+      <br/>
+      <Typography variant='h5'>Upcoming features: </Typography>
+      <ul>
+        <li>Comments on plans</li>
+        <li>Ratings on plans</li>
+        <li>Control and view HeaterMeter data alongside plans</li>
+        <li>Hooking HeaterMeter set points and configurations to plan steps</li>
+      </ul>
+		</PaperContainer>
 	);
 };
 

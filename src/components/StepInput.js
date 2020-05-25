@@ -2,13 +2,21 @@ import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {
   Button,
-  Grid,
   TextField
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
+  button: {
+    width: theme.spacing(12)
+  },
   inputContainer: {
-    padding: theme.spacing(1)
+    display: 'flex',
+    paddingTop: theme.spacing(2),
+    width: '100%'
+  },
+  stepInput: {
+    margin: 0,
+    flexGrow: 1
   }
 }));
 
@@ -16,35 +24,31 @@ const StepInput = props => {
   const classes = useStyles();
   const [action, setAction] = useState();
 
-
   const addStep = async () => {
     const step = {action};
     await props.addStep(step);
-    console.log('setting step to empty')
     setAction('');
   }
 
   return (
-    <Grid container className={classes.inputContainer}>
-      <Grid xs={10} md={11} item style={{ paddingRight: 16 }}>
+    <div className={classes.inputContainer}>
         <TextField
-          placeholder='Input next step'
+          className={classes.stepInput}
+          placeholder='Create New Step'
           value={action}
           onChange={ev => setAction(ev.target.value)}
-          fullWidth
-        />
-      </Grid>
-      <Grid xs={2} md={1} item>
-        <Button
-          fullWidth
-          color='secondary'
           variant='outlined'
+          margin='dense'
+        />
+        <Button
+          className={classes.button}
+          variant='contained'
+          color='primary'
           onClick={() => addStep()}
         >
           Add
         </Button>
-      </Grid>
-    </Grid>
+    </div>
   );
 };
 

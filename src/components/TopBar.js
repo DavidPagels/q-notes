@@ -37,10 +37,12 @@ const useStyles = makeStyles(theme => ({
     display: 'none'
   },
   title: {
+    fontFamily: 'Gochi Hand',
     flexGrow: 1,
     textDecoration: 'none'
   },
   toolbar: {
+    paddingLeft: theme.spacing(2),
     paddingRight: 24 // keep right padding when drawer closed
   },
   userIcon: {
@@ -73,7 +75,7 @@ const TopBar = props => {
           <div color='inherit' className={classes.userName}>
             {user.name}
           </div>
-          <img src={user.picture} className={classes.userIcon}/>
+          <img alt={`${user.name} profile`} src={user.picture} className={classes.userIcon}/>
         </Button>
         <Menu
           id="simple-menu"
@@ -100,7 +102,7 @@ const TopBar = props => {
         >
           <MenuIcon />
         </IconButton>
-        <Typography {...{to: '/'}} component={'h1', Link} variant='h6' className={classes.title} color='inherit' noWrap>
+        <Typography {...{to: '/'}} component={Link} variant='h4' className={classes.title} color='inherit' noWrap>
           Q Notes
         </Typography>
         {isAuthenticated && user ? 

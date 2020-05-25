@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useAuth0 } from './Auth0';
 
 let API_HOST;
@@ -8,6 +8,7 @@ export const useApi = () => useContext(ApiContext);
 export const ApiProvider = ({children, apiHost}) => {
   API_HOST = apiHost;
   const [fetching, setFetching] = useState(false);
+  const [userSettings, setUserSettings] = useState({});
   const { isAuthenticated, getTokenSilently } = useAuth0();
 
   const getRequest = (path) => {
@@ -37,7 +38,7 @@ export const ApiProvider = ({children, apiHost}) => {
     return apiRequest(path, opts);
   };
   
-    const deleteRequest = (path) => {
+  const deleteRequest = path => {
     const opts = {
       method: 'DELETE'
     };
@@ -68,7 +69,19 @@ export const ApiProvider = ({children, apiHost}) => {
     } finally {
       setFetching(false);
     }
-  }
+  };
+
+  const updateUserSettings = async () => {
+    const settings = await getRequest(`/users/settings`) || {};
+    setUserSettings(settings);
+  };
+
+  useEffect(() => {
+    if(isAuthenticated) {
+      updateUserSettings();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   return (
     <ApiContext.Provider
@@ -77,7 +90,9 @@ export const ApiProvider = ({children, apiHost}) => {
         putRequest,
         postRequest,
         deleteRequest,
-        fetching
+        fetching,
+        userSettings,
+        updateUserSettings
       }}
     >
       {children}
