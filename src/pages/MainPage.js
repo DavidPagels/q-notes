@@ -1,8 +1,6 @@
 import React from 'react';
 import PaperContainer from '../components/PaperContainer';
-import {
-  Typography
-} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 const MainPage = (props) => {
 

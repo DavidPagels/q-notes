@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { Snackbar } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
 
 export const SnackbarContext = createContext();
 export const useSnackbar = () => useContext(SnackbarContext);

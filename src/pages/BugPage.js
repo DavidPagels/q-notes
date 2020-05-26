@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Button,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import PaperContainer from '../components/PaperContainer';
 import { useApi } from '../providers/Api';
 import { useSnackbar } from '../providers/Snackbar';

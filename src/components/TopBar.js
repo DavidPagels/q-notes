@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {
-  AppBar, 
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography
-} from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu'
 import { useAuth0 } from '../providers/Auth0';
 
@@ -84,7 +82,7 @@ const TopBar = props => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={ev => logout() && handleMenuClose(ev)}>Logout</MenuItem>
+          <MenuItem onClick={ev => logout({returnTo: window.location.origin}) && handleMenuClose(ev)}>Logout</MenuItem>
         </Menu>
       </div>
     );

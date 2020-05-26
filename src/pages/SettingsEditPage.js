@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import {
-  Button,
-  Grid,
-  Switch,
-  TextField,
-  Typography
-} from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import { useAuth0 } from '../providers/Auth0';
 import { useApi } from '../providers/Api';
 import { useSnackbar } from '../providers/Snackbar';
@@ -53,7 +51,6 @@ const SettingsEditPage = (props) => {
   };
 
   const handleThemeToggle = ev => {
-    console.log(ev);
     setTheme(ev.target.checked ? 'dark' : 'light')
   };
 

@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Tooltip
-} from '@material-ui/core';
-import { Visibility } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import { useApi } from '../providers/Api';
 import * as qs from 'qs';
 import * as moment from 'moment';
@@ -99,7 +97,7 @@ const PlanList = (props) => {
     	          <TableCell>{plan.private ? 'Yes' : 'No'}</TableCell>
                 <TableCell>
                   <IconButton className={classes.tableButton} {...{to: `/plans/${plan.id}`}} component={Link}>
-                    <Visibility />
+                    <VisibilityIcon />
                   </IconButton>
                 </TableCell>
     	        </TableRow>

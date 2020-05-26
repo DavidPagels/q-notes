@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import PaperContainer from '../components/PaperContainer'
 import PlanEdit from '../components/PlanEdit';
 import StepList from '../components/StepList';

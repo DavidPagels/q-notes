@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { Auth0Provider } from './providers/Auth0';
 import { ApiProvider } from './providers/Api';
-import { SnackbarProvider } from './providers/Snackbar';
 import config from './config.json';
 import history from './utils/history';
 
@@ -23,9 +22,7 @@ ReactDOM.render(
     audience={config.audience}
 		onRedirectCallback={onRedirectCallback}>
     <ApiProvider apiHost={config.apiHost}>
-      <SnackbarProvider>
-        <App />
-      </SnackbarProvider>
+      <App />
     </ApiProvider>
   </Auth0Provider>,
   document.getElementById('root')

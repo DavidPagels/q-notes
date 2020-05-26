@@ -3,23 +3,21 @@ import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { useAuth0 } from '../providers/Auth0';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  ChevronLeft,
-  Restaurant,
-  Router,
-  Settings,
-  BugReport
-} from '@material-ui/icons';
-import { 
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Tooltip
-} from '@material-ui/core';
+
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import RouterIcon from '@material-ui/icons/Router';
+import SettingsIcon from '@material-ui/icons/Settings';
+import BugReportIcon from '@material-ui/icons/BugReport';
+
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
   drawerPaper: {
@@ -53,10 +51,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NAV_LINKS = [
-  {icon: Restaurant, title: 'Plans', linkOpts: {to: '/plans'}},
-  {icon: Router, title: 'HeaterMeter', linkOpts: {to: '/heaterMeter'}, requireAuth: true},
-  {icon: Settings, title: 'Settings', linkOpts: {to: '/settings'}, requireAuth: true},
-  {icon: BugReport, title: 'Bugs and Feedback', linkOpts: {to: '/bugs'}, requireAuth: true}
+  {icon: RestaurantIcon, title: 'Plans', linkOpts: {to: '/plans'}},
+  {icon: RouterIcon, title: 'HeaterMeter', linkOpts: {to: '/heaterMeter'}, requireAuth: true},
+  {icon: SettingsIcon, title: 'Settings', linkOpts: {to: '/settings'}, requireAuth: true},
+  {icon: BugReportIcon, title: 'Bugs and Feedback', linkOpts: {to: '/bugs'}, requireAuth: true}
 ];
 
 const SidebarNav = props => {
@@ -85,7 +83,7 @@ const SidebarNav = props => {
         >
       <div className={classes.toolbarIcon}>
         <IconButton onClick={() => props.setOpen(false)}>
-          <ChevronLeft />
+          <ChevronLeftIcon />
         </IconButton>
       </div>
       <Divider />

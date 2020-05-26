@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
-import {
-	IconButton,
-	Toolbar,
-	Typography
-} from '@material-ui/core'
-import { Add } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import PlanList from '../components/PlanList';
 import PaperContainer from '../components/PaperContainer';
 
@@ -37,7 +35,7 @@ const PlanListPage = (props) => {
         </Typography>
         
         <IconButton {...{to: `/newPlan`}} component={Link}>
-          <Add />
+          <AddIcon />
         </IconButton>
       </Toolbar>
       <PlanList/>

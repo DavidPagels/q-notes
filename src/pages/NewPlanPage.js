@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import PaperContainer from '../components/PaperContainer';
 import PlanEdit from '../components/PlanEdit';
 import { useApi } from '../providers/Api';

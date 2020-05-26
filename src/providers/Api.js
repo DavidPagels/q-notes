@@ -9,7 +9,7 @@ export const ApiProvider = ({children, apiHost}) => {
   API_HOST = apiHost;
   const [fetching, setFetching] = useState(false);
   const [userSettings, setUserSettings] = useState({});
-  const { isAuthenticated, getTokenSilently } = useAuth0();
+  const { isAuthenticated, getTokenSilently, user } = useAuth0();
 
   const getRequest = (path) => {
     path = isAuthenticated ? path : `/public${path}`;
@@ -72,16 +72,17 @@ export const ApiProvider = ({children, apiHost}) => {
   };
 
   const updateUserSettings = async () => {
+    await putRequest(`/userLogin`, user);
     const settings = await getRequest(`/users/settings`) || {};
     setUserSettings(settings);
   };
 
   useEffect(() => {
-    if(isAuthenticated) {
+    if(isAuthenticated && user) {
       updateUserSettings();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   return (
     <ApiContext.Provider

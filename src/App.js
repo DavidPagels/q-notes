@@ -20,6 +20,7 @@ import SidebarNav from './components/SidebarNav';
 import HeaterMeterPage from './pages/HeaterMeterPage';
 import { useAuth0 } from './providers/Auth0';
 import { useApi } from './providers/Api';
+import { SnackbarProvider } from './providers/Snackbar';
 
 const drawerWidth = 240;
 
@@ -68,30 +69,32 @@ const App = () => {
   
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter history={history}>
-  	   <div className={classes.root}>
-          <CssBaseline />
-          <TopBar open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
-          <SidebarNav open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
-          <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
-            { 
-              loading ? 
-              <LinearProgress /> :
-              <Switch>
-                <Route path='/' component={MainPage} exact />
-                <PrivateRoute path='/newPlan' component={NewPlanPage} />
-                <PrivateRoute path='/editPlan/:planId' component={PlanEditPage} />
-                <PrivateRoute path='/heaterMeter' component={HeaterMeterPage} />
-                <PrivateRoute path='/settings' component={SettingsEditPage} />
-                <PrivateRoute path='/bugs' component={BugPage} />
-                <Route path='/plans/:planId' component={PlanPage} />
-                <Route path='/plans' component={PlanListPage} />
-              </Switch>
-            }
-          </main>
-        </div>
-      </BrowserRouter>
+      <SnackbarProvider>
+        <BrowserRouter history={history}>
+          <div className={classes.root}>
+            <CssBaseline />
+            <TopBar open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
+            <SidebarNav open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
+            <main className={classes.content}>
+              <div className={classes.appBarSpacer} />
+              { 
+                loading ? 
+                <LinearProgress /> :
+                <Switch>
+                  <Route path='/' component={MainPage} exact />
+                  <PrivateRoute path='/newPlan' component={NewPlanPage} />
+                  <PrivateRoute path='/editPlan/:planId' component={PlanEditPage} />
+                  <PrivateRoute path='/heaterMeter' component={HeaterMeterPage} />
+                  <PrivateRoute path='/settings' component={SettingsEditPage} />
+                  <PrivateRoute path='/bugs' component={BugPage} />
+                  <Route path='/plans/:planId' component={PlanPage} />
+                  <Route path='/plans' component={PlanListPage} />
+                </Switch>
+              }
+            </main>
+          </div>
+        </BrowserRouter>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };
