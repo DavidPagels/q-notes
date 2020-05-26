@@ -15,7 +15,6 @@ const MainPage = (props) => {
       <br/>
       <Typography variant='h5'>Upcoming features: </Typography>
       <ul>
-        <li>Comments on plans</li>
         <li>Ratings on plans</li>
         <li>Control and view HeaterMeter data alongside plans</li>
         <li>Hooking HeaterMeter set points and configurations to plan steps</li>

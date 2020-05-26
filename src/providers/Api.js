@@ -74,6 +74,9 @@ export const ApiProvider = ({children, apiHost}) => {
   const updateUserSettings = async () => {
     await putRequest(`/userLogin`, user);
     const settings = await getRequest(`/users/settings`) || {};
+    if (settings.theme) {
+      localStorage.setItem('q-theme', settings.theme);
+    }
     setUserSettings(settings);
   };
 

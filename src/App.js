@@ -45,10 +45,11 @@ const App = () => {
   const { userSettings } = useApi();
   const [open, setOpen] = useState(false);
   const classes = useStyles();
+  const storedTheme = localStorage.getItem('q-theme');
 
   const theme = createMuiTheme({
     palette: {
-      type: userSettings.theme || (prefersDarkMode ? 'dark' : 'light'),
+      type: storedTheme || (prefersDarkMode ? 'dark' : 'light'),
       primary: {
         main: '#4d062e'
       },
