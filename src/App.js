@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute';
 import SidebarNav from './components/SidebarNav';
 import HeaterMeterPage from './pages/HeaterMeterPage';
 import { useAuth0 } from './providers/Auth0';
+import { useApi } from './providers/Api';
 import { SnackbarProvider } from './providers/Snackbar';
 
 const drawerWidth = 240;
@@ -41,13 +42,18 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const { loading } = useAuth0();
+  const { userSettings } = useApi();
   const [open, setOpen] = useState(false);
   const classes = useStyles();
-  const storedTheme = localStorage.getItem('q-theme');
+
+  let themeOverride = userSettings.theme;
+  if (!themeOverride) {
+    themeOverride = localStorage.getItem('q-theme');
+  }
 
   const theme = createMuiTheme({
     palette: {
-      type: storedTheme || (prefersDarkMode ? 'dark' : 'light'),
+      type: themeOverride || (prefersDarkMode ? 'dark' : 'light'),
       primary: {
         main: '#4d062e'
       },
