@@ -7,6 +7,7 @@ import PaperContainer from '../components/PaperContainer';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { useApi } from '../providers/Api';
+import { useAuth0 } from '../providers/Auth0';
 
 import StepList from '../components/StepList';
 import CommentList from '../components/CommentList';
@@ -25,6 +26,7 @@ const PlanPage = (props) => {
 	const classes = useStyles();
   const history = useHistory();
   const { getRequest, postRequest } = useApi();
+  const { user } = useAuth0();
   const { planId } = useParams();
 
   const [plan, setPlan] = useState({});
@@ -41,11 +43,11 @@ const PlanPage = (props) => {
   }
 
   const copyPlan = async () => {
-    const splitName = plan.name.split(' - copy ')
+    const splitName = plan.name.split(' - copy ');
     const copyNumber = Number(splitName.slice(-1)) || 0;
     const newPlan = {...plan, name: `${splitName[0]} - copy ${copyNumber + 1}`};
     const createdPlan = await postRequest(`/plans/steps`, newPlan);
-    history.push(`/editPlan/${createdPlan.id}`)
+    history.push(`/editPlan/${createdPlan.id}`);
   };
 
   const addComment = async comment => {
@@ -69,9 +71,13 @@ const PlanPage = (props) => {
           <IconButton onClick={copyPlan}>
             <FileCopyIcon />
           </IconButton>
-          <IconButton {...{to: `/editPlan/${planId}`}} component={Link}>
-            <EditIcon />
-          </IconButton>
+          {
+            plan.userId === user.sub ?
+            <IconButton {...{to: `/editPlan/${planId}`}} component={Link}>
+              <EditIcon />
+            </IconButton> :
+            ''
+          }
         </div>
         <StepList steps={plan.steps || []}/>
       </PaperContainer>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import PaperContainer from '../components/PaperContainer';
@@ -12,13 +13,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NewPlanPage = (props) => {
+  const history = useHistory();
   const classes = useStyles();
   const { postRequest } = useApi();
 
 	const addPlan = async plan => {
 		const requestBody = {name: plan.name, private: plan.isPrivate};
-		await postRequest(`/plans`, requestBody);
-		props.history.push('/plans');
+		const createdPlan = await postRequest(`/plans`, requestBody);
+		history.push(`/editPlan/${createdPlan.id}`);
 	}
 
 	return (

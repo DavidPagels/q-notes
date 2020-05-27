@@ -33,7 +33,7 @@ const PlanEditPage = (props) => {
   const init = async () => {
     await getPlan();
     setLoading(false);
-  }
+  };
 
   const getPlan = async () => {
     setPlan(await getRequest(`/plans/${planId}`));
@@ -44,17 +44,22 @@ const PlanEditPage = (props) => {
 		await putRequest(`/plans/${planId}`, requestBody);
     showSnackbar('Plan Saved');
 		history.push(`/plans/${planId}`);
-	}
+	};
 
   const addStep = async step => {
     await postRequest(`/plans/${planId}/steps`, [step]);
     return getPlan();
-  }
+  };
 
   const deleteStep = async stepId => {
     await deleteRequest(`/plans/${planId}/steps/${stepId}`);
     return getPlan();
-  }
+  };
+
+  const editStep = async step => {
+    await putRequest(`/plans/${planId}/steps/${step.id}`, step);
+    return getPlan();
+  };
 
   useEffect(() => {
     init();
@@ -75,6 +80,7 @@ const PlanEditPage = (props) => {
           </Typography>
           <StepList 
               className={classes.stepList} 
+              editStep={editStep}
               deleteStep={deleteStep} 
               steps={plan.steps || []}/>
           <StepInput className={classes.stepInput} addStep={addStep} />

@@ -12,14 +12,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const StepList = props => {
-  const { steps, deleteStep } = props;
+  const { steps, deleteStep, editStep } = props;
   const classes = useStyles();
 
 	return (
     <TableContainer>
       <Table className={classes.table} size='small'>
         <TableBody>
-          {steps.map((step) => <Step key={step.id} deleteStep={deleteStep} step={step} />)}
+          {steps.map((step) => <Step key={step.id} editStep={editStep} deleteStep={deleteStep} step={step} />)}
         </TableBody>
       </Table>
     </TableContainer>

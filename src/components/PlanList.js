@@ -63,6 +63,10 @@ const PlanList = (props) => {
     updatePage(1, parseInt(event.target.value, 10));
   };
 
+  const goToPlanPage = (planId) => {
+    history.push(`/plans/${planId}`);
+  };
+
 	return (
 		<div>
     	<TableContainer>
@@ -79,19 +83,19 @@ const PlanList = (props) => {
     	    </TableHead>
     	    <TableBody>
     	      {plans.map((plan) => (
-    	        <TableRow key={plan.id}>
+    	        <TableRow key={plan.id} hover onClick={() => goToPlanPage(plan.id)}>
     	          <TableCell>
     	            {plan.name}
     	          </TableCell>
     	          <TableCell>{plan.userName || plan.userId}</TableCell>
-                <Tooltip title={moment(plan.created).format('YYYY-MM-DD h:mm a')}>
+                <Tooltip title={moment.utc(plan.created).format('YYYY-MM-DD h:mm a')}>
                   <TableCell>
-                    {moment(plan.created).fromNow()}
+                    {moment.utc(plan.created).fromNow()}
                   </TableCell>
                 </Tooltip>
-                <Tooltip title={moment(plan.updated).format('YYYY-MM-DD h:mm a')}>
+                <Tooltip title={moment.utc(plan.updated).format('YYYY-MM-DD h:mm a')}>
                   <TableCell>
-                    {moment(plan.updated).fromNow()}
+                    {moment.utc(plan.updated).fromNow()}
                   </TableCell>
                 </Tooltip>
     	          <TableCell>{plan.private ? 'Yes' : 'No'}</TableCell>
