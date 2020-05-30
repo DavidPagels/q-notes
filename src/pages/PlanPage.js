@@ -68,14 +68,18 @@ const PlanPage = (props) => {
           <Typography className={classes.title} variant='h6'>
             {plan.name}
           </Typography>
-          <IconButton onClick={copyPlan}>
-            <FileCopyIcon />
-          </IconButton>
-          {
-            user && plan.userId === user.sub ?
-            <IconButton {...{to: `/editPlan/${planId}`}} component={Link}>
-              <EditIcon />
-            </IconButton> :
+          { user ? 
+            <div>
+              <IconButton onClick={copyPlan}>
+                <FileCopyIcon />
+              </IconButton>
+              { plan.userId === user.sub ?
+                <IconButton {...{to: `/editPlan/${planId}`}} component={Link}>
+                  <EditIcon />
+                </IconButton> :
+                ''
+              } 
+            </div> : 
             ''
           }
         </div>
