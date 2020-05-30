@@ -72,7 +72,7 @@ const PlanPage = (props) => {
             <FileCopyIcon />
           </IconButton>
           {
-            plan.userId === user.sub ?
+            user && plan.userId === user.sub ?
             <IconButton {...{to: `/editPlan/${planId}`}} component={Link}>
               <EditIcon />
             </IconButton> :

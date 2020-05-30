@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import history from './utils/history';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import {
@@ -75,7 +75,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
-        <BrowserRouter history={history}>
+        <Router history={history}>
           <div className={classes.root}>
             <CssBaseline />
             <TopBar open={open} setOpen={setOpen} drawerWidth={drawerWidth}/>
@@ -98,7 +98,7 @@ const App = () => {
               }
             </main>
           </div>
-        </BrowserRouter>
+        </Router>
       </SnackbarProvider>
     </ThemeProvider>
   );

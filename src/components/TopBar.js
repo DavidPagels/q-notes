@@ -105,7 +105,9 @@ const TopBar = props => {
         </Typography>
         {isAuthenticated && user ? 
           renderUserMenu() :
-        	<Button color='inherit' onClick={() => loginWithRedirect({})}>Log in</Button>
+        	<Button color='inherit' onClick={() => loginWithRedirect({
+            appState: {targetUrl: window.location.pathname}
+            })}>Log in</Button>
     		}
       </Toolbar>
     </AppBar>
