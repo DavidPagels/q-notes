@@ -16,6 +16,9 @@ import * as qs from 'qs';
 import * as moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
+  meatType: {
+    textTransform: 'capitalize'
+  },
   table: {
     minWidth: 650
   },
@@ -75,6 +78,7 @@ const PlanList = (props) => {
     	      <TableRow>
     	        <TableCell>Name</TableCell>
     	        <TableCell>User</TableCell>
+              <TableCell>Meat</TableCell>
               <TableCell>Created</TableCell>
               <TableCell>Updated</TableCell>
     	        <TableCell>Private</TableCell>
@@ -88,6 +92,7 @@ const PlanList = (props) => {
     	            {plan.name}
     	          </TableCell>
     	          <TableCell>{plan.userName || plan.userId}</TableCell>
+                <TableCell className={classes.meatType}>{plan.meatType}</TableCell>
                 <Tooltip title={moment.utc(plan.created).format('YYYY-MM-DD h:mm a')}>
                   <TableCell>
                     {moment.utc(plan.created).fromNow()}

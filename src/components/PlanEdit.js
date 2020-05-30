@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -25,6 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
   nameInput: {
     width: '100%'
+  },
+  meatSelect: {
+    width: '100%'
   }
 }));
 
@@ -34,6 +41,7 @@ const PlanEdit = props => {
   const { plan = {} } = props;
   const [isPrivate, setIsPrivate] = useState(!!plan.private);
   const [planName, setPlanName] = useState(plan.name);
+  const [meatId, setMeatId] = useState(plan.meatId);
 
   const cancelEdit = ev => {
     history.goBack();
@@ -41,14 +49,14 @@ const PlanEdit = props => {
 
   const submitPlan = ev => {
     ev.preventDefault();
-    const plan = {name: planName, isPrivate};
+    const plan = {name: planName, meatId, isPrivate};
     props.onPlanSubmit(plan);
   };
 
   return (
     <form onSubmit={submitPlan} noValidate>
       <Grid container alignItems='flex-start' spacing={2}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <TextField 
             className={classes.nameInput}
             defaultValue={plan.name}
@@ -56,7 +64,22 @@ const PlanEdit = props => {
             onChange={e => setPlanName(e.target.value)} 
             variant='outlined'/>
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={6}>
+          <FormControl variant="outlined" className={classes.meatSelect}>
+            <InputLabel>Meat</InputLabel>
+            <Select value={meatId} onChange={(e) => setMeatId(e.target.value)} label="Meat">
+              <MenuItem value={1}>Pork</MenuItem>
+              <MenuItem value={2}>Beef</MenuItem>
+              <MenuItem value={3}>Chicken</MenuItem>
+              <MenuItem value={4}>Turkey</MenuItem>
+              <MenuItem value={5}>Other Poultry</MenuItem>
+              <MenuItem value={6}>Wild Game</MenuItem>
+              <MenuItem value={7}>Seafood</MenuItem>
+              <MenuItem value={8}>Other</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
           <FormControlLabel
             className={classes.checkbox}
     			  control={

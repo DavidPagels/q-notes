@@ -40,7 +40,7 @@ const PlanEditPage = (props) => {
   };
 
 	const editPlan = async plan => {
-		const requestBody = {name: plan.name, private: plan.isPrivate};
+		const requestBody = {name: plan.name, meatId: plan.meatId, private: plan.isPrivate};
 		await putRequest(`/plans/${planId}`, requestBody);
     showSnackbar('Plan Saved');
 		history.push(`/plans/${planId}`);

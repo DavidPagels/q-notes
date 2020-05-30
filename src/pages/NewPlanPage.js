@@ -18,7 +18,7 @@ const NewPlanPage = (props) => {
   const { postRequest } = useApi();
 
 	const addPlan = async plan => {
-		const requestBody = {name: plan.name, private: plan.isPrivate};
+		const requestBody = {name: plan.name, meatId: plan.meatId, private: plan.isPrivate};
 		const createdPlan = await postRequest(`/plans`, requestBody);
 		history.push(`/editPlan/${createdPlan.id}`);
 	}
