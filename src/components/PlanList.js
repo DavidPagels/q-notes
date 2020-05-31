@@ -123,6 +123,7 @@ const PlanList = (props) => {
             <MenuItem value={6}>Wild Game</MenuItem>
             <MenuItem value={7}>Seafood</MenuItem>
             <MenuItem value={8}>Other</MenuItem>
+            <MenuItem value={9}>Projects/Devices</MenuItem>
           </Select>
         </FormControl>
         

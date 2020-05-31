@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles(theme => ({
   editActionInput: {
@@ -79,7 +80,7 @@ const Step = props => {
             multiline
             size='small'
             variant='outlined'/> : 
-          step.action
+          <ReactMarkdown source={step.action} escapeHtml={false} />
         }
       </TableCell>
       <TableCell className={classes.tableAction}>

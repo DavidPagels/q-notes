@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import * as moment from 'moment';
+import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles(theme => ({
   itemContainer: {
@@ -65,9 +66,9 @@ const Comment = props => {
             </Typography>
           </div>
         </div>
-        <Typography className={classes.bottomContainer} color='textSecondary' variant='body2'>
-          {comment.comment}
-        </Typography>
+        <div className={classes.bottomContainer}>
+          <ReactMarkdown source={comment.comment} escapeHtml={false}/>
+        </div>
       </div>
     </ListItem>
   );
