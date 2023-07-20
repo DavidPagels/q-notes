@@ -1,30 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import PaperContainer from '../components/PaperContainer';
-import EditIcon from '@material-ui/icons/Edit';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import EditIcon from '@mui/icons-material/Edit';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { useApi } from '../providers/Api';
-import { useAuth0 } from '../providers/Auth0';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import StepList from '../components/StepList';
 import CommentList from '../components/CommentList';
 import CommentInput from '../components/CommentInput';
 
-const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    display: 'flex'
-  },
-  title: {
-    flexGrow: 1
-  }
-}));
-
 const PlanPage = (props) => {
-	const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { getRequest, postRequest } = useApi();
   const { user } = useAuth0();
   const { planId } = useParams();
@@ -45,9 +34,9 @@ const PlanPage = (props) => {
   const copyPlan = async () => {
     const splitName = plan.name.split(' - copy ');
     const copyNumber = Number(splitName.slice(-1)) || 0;
-    const newPlan = {...plan, name: `${splitName[0]} - copy ${copyNumber + 1}`};
+    const newPlan = { ...plan, name: `${splitName[0]} - copy ${copyNumber + 1}` };
     const createdPlan = await postRequest(`/plans/steps`, newPlan);
-    history.push(`/editPlan/${createdPlan.id}`);
+    navigate(`/editPlan/${createdPlan.id}`);
   };
 
   const addComment = async comment => {
@@ -61,39 +50,39 @@ const PlanPage = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-	return (
+  return (
     <div>
       <PaperContainer>
-        <div className={classes.toolbar}>
-          <Typography className={classes.title} variant='h6'>
+        <div sx={{ display: 'flex' }}>
+          <Typography sx={{ flexGrow: 1 }} variant='h6'>
             {plan.name}
           </Typography>
-          { user ? 
+          {user ?
             <div>
               <IconButton onClick={copyPlan}>
                 <FileCopyIcon />
               </IconButton>
-              { plan.userId === user.sub ?
-                <IconButton {...{to: `/editPlan/${planId}`}} component={Link}>
+              {plan.userId === user.sub ?
+                <IconButton {...{ to: `/editPlan/${planId}` }} component={Link}>
                   <EditIcon />
                 </IconButton> :
                 ''
-              } 
-            </div> : 
+              }
+            </div> :
             ''
           }
         </div>
-        <StepList steps={plan.steps || []}/>
+        <StepList steps={plan.steps || []} />
       </PaperContainer>
       <PaperContainer>
-        <Typography className={classes.title} variant='h6'>
+        <Typography sx={{ flexGrow: 1 }} variant='h6'>
           Comments and Results
         </Typography>
         <CommentList comments={comments} />
-        <CommentInput className={classes.commentInput} addComment={addComment} />
+        <CommentInput addComment={addComment} />
       </PaperContainer>
     </div>
-	);
+  );
 };
 
 export default PlanPage;

@@ -1,55 +1,33 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import ReactMarkdown from 'react-markdown';
 
-const useStyles = makeStyles(theme => ({
-  previewButton: {
-    borderRadius: '0 0 0 4px',
-    float: 'right'
-  },
-  addButton: {
-    borderRadius: '0 0 4px 0',
-    width: theme.spacing(12),
-    float: 'right'
-  },
-  inputContainer: {
-    paddingTop: theme.spacing(2),
-    width: '100%'
-  },
-  bottomRow: {
-    display: 'flex'
-  },
-  filler: {
-    flexGrow: 1
-  },
-  commentInput: {
-    margin: 0,
-    width: '100%',
-    [`& fieldset`]: {
-      borderRadius: '4px 4px 0 4px',
-    }
-  }
-}));
-
 const CommentInput = props => {
-  const classes = useStyles();
   const [comment, setComment] = useState('');
   const [previewing, setPreviewing] = useState(false);
 
   const addComment = async () => {
-    await props.addComment({comment});
+    await props.addComment({ comment });
     setComment('');
     setPreviewing(false);
   }
 
   return (
-    <div className={classes.inputContainer}>
+    <div sx={(theme) => ({
+      paddingTop: theme.spacing(2),
+      width: '100%'
+    })}>
       {previewing ?
-        <ReactMarkdown source={comment} escapeHtml={false}/> :
+        <ReactMarkdown source={comment} escapeHtml={false} /> :
         <TextField
-          className={classes.commentInput}
+          sx={{
+            margin: 0,
+            width: '100%',
+            [`& fieldset`]: {
+              borderRadius: '4px 4px 0 4px',
+            }
+          }}
           placeholder='Write a Comment'
           value={comment}
           onChange={ev => setComment(ev.target.value)}
@@ -59,16 +37,20 @@ const CommentInput = props => {
           rowsMax={15}
         />
       }
-      <div className={classes.bottomRow}>
-        <div className={classes.filler} />
+      <div sx={{ display: 'flex' }}>
+        <div sx={{ flexGrow: 1 }} />
         <Button
-          className={classes.previewButton}
+          sx={{ borderRadius: '0 0 0 4px', float: 'right' }}
           variant='contained'
           onClick={() => setPreviewing(!previewing)}>
           {previewing ? 'Edit' : 'Preview'}
         </Button>
         <Button
-          className={classes.addButton}
+          sx={(theme) => ({
+            borderRadius: '0 0 4px 0',
+            width: theme.spacing(12),
+            float: 'right'
+          })}
           variant='contained'
           color='primary'
           onClick={() => addComment()}

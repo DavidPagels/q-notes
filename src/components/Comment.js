@@ -1,76 +1,71 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import ListItem from '@material-ui/core/ListItem';
-import Typography from '@material-ui/core/Typography';
+import { styled } from '@mui/system';
+import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
 import * as moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 
-const useStyles = makeStyles(theme => ({
-  itemContainer: {
+const ItemContainer = styled(ListItem)(
+  ({ theme }) => ({
     overflowWrap: 'anywhere',
     display: 'table',
     paddingLeft: 0,
     paddingRight: 0,
     paddingBottom: theme.spacing(2)
-  },
-  leftColumn: {
+  })
+);
+
+const LeftColumn = styled('div')(
+  ({ theme }) => ({
     display: 'table-cell',
     height: '100%',
     paddingRight: theme.spacing(2),
     float: 'left'
-  },
-  rightColumn: {
-    width: '100%'
-  },
-  infoRow: {
-    display: 'flex',
-    paddingBottom: theme.spacing(2)
-  },
-  userIcon: {
+  })
+);
+
+const UserIcon = styled('img')(
+  ({ theme }) => ({
     width: theme.spacing(5),
     height: theme.spacing(5),
     borderRadius: '25%'
-  },
-  userName: {
-    flexGrow: 1
-  },
-  dateContainer: {
-    textAlign: 'right'
-  },
-  date: {
-    justifyContent: 'flex-end',
-    display: 'flex'
-  }
-}));
+  })
+);
+
+const InfoRow = styled('div')(
+  ({ theme }) => ({
+    display: 'flex',
+    paddingBottom: theme.spacing(2)
+  })
+);
 
 const Comment = props => {
   const { comment } = props;
-  const classes = useStyles();
 
-	return (
-    <ListItem className={classes.itemContainer}>
-      <div className={classes.leftColumn}>
-        <img alt={comment.created} src={comment.userPicture} className={classes.userIcon}/>
-      </div>
-      <div className={classes.rightColumn}>
-        <div className={classes.infoRow}>
-          <Typography className={classes.userName} variant='subtitle1'>
+  return (
+    <ItemContainer>
+      <LeftColumn>
+        <UserIcon alt={comment.created} src={comment.userPicture} />
+      </LeftColumn>
+      <div sx={{ width: '100%' }}>
+        <InfoRow>
+          <Typography sx={{ flexGrow: 1 }} variant='subtitle1'>
             {comment.userName}
           </Typography>
-          <div className={classes.dateContainer}>
-            <Typography variant='caption' className={classes.date}>
+          <div sx={{ textAlign: 'right' }}>
+            <Typography variant='caption' sx={{ justifyContent: 'flex-end', display: 'flex' }}>
               {moment(comment.created).format('ll')}
             </Typography>
-            <Typography variant='caption' className={classes.date}>
+            <Typography variant='caption' sx={{ justifyContent: 'flex-end', display: 'flex' }}>
               {moment(comment.created).format('LT')}
             </Typography>
           </div>
-        </div>
-        <div className={classes.bottomContainer}>
-          <ReactMarkdown source={comment.comment} escapeHtml={false}/>
+        </InfoRow>
+        <div>
+          <ReactMarkdown source={comment.comment} escapeHtml={false} />
         </div>
       </div>
-    </ListItem>
+    </ItemContainer>
   );
 };
 

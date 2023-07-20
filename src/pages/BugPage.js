@@ -1,86 +1,73 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import { useNavigate } from 'react-router-dom';
+import { styled } from '@mui/system';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import PaperContainer from '../components/PaperContainer';
 import { useApi } from '../providers/Api';
 import { useSnackbar } from '../providers/Snackbar';
 
-const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    display: 'flex'
-  },
-  title: {
-    flexGrow: 1
-  },
-  subtitle: {
-    marginBottom: theme.spacing(2)
-  },
-  feedbackInput: {
-    width: '100%'
-  },
-  buttonContainer: {
+const ButtonContainer = styled('div')(
+  ({ theme }) => ({
     width: '100%',
     paddingTop: theme.spacing(4),
     display: 'flex',
     justifyContent: 'flex-end'
-  },
-  button: {
+  })
+);
+
+const StyledButton = styled(Button)(
+  ({ theme }) => ({
     width: theme.spacing(12)
-  },
-  firstButton: {
-    marginRight: theme.spacing(2)
-  }
-}));
+  })
+);
 
 const BugPage = (props) => {
-	const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { postRequest } = useApi();
   const { showSnackbar } = useSnackbar();
 
   const [feedback, setFeedback] = useState('');
 
   const cancelEdit = ev => {
-    history.goBack();
+    navigate(-1);
   };
 
   const submitFeedback = async ev => {
     ev.preventDefault();
-    await postRequest('/bugs', {feedback});
+    await postRequest('/bugs', { feedback });
     showSnackbar('Feedback Received!');
-    history.push('/');
+    navigate('/');
   };
 
-	return (
+  return (
     <PaperContainer>
-      <div className={classes.toolbar}>
-        <Typography className={classes.title} variant='h6'>
+      <div sx={{ display: 'flex' }}>
+        <Typography sx={{ flexGrow: 1 }} variant='h6'>
           Bugs and Feature Requests
         </Typography>
       </div>
-      <Typography variant='subtitle1' className={classes.subtitle}>
+      <Typography variant='subtitle1' sx={(theme) => ({ marginBottom: theme.spacing(2) })}>
         Please submit any unexpected site behaviors, feature requests, or feedback here and I'll do my best to use it to improve the site!
       </Typography>
       <form onSubmit={submitFeedback} noValidate>
         <TextField
           multiline
           rowsMax={10}
-          className={classes.feedbackInput}
-          label='Feedback' 
-          onChange={e => setFeedback(e.target.value)} 
-          variant='outlined'/>
-        <div className={classes.buttonContainer}>
-          <Button className={`${classes.button} ${classes.firstButton}`} onClick={cancelEdit} variant='contained'>Cancel</Button>
-          <Button className={classes.button} variant='contained' color='primary' type='submit'>
+          sx={{ width: '100%' }}
+          label='Feedback'
+          onChange={e => setFeedback(e.target.value)}
+          variant='outlined' />
+        <ButtonContainer>
+          <StyledButton sx={(theme) => ({ marginRight: theme.spacing(2) })} onClick={cancelEdit} variant='contained'>Cancel</StyledButton>
+          <StyledButton variant='contained' color='primary' type='submit'>
             Submit
-          </Button>
-        </div>
+          </StyledButton>
+        </ButtonContainer>
       </form>
     </PaperContainer>
-	);
+  );
 };
 
 export default BugPage;

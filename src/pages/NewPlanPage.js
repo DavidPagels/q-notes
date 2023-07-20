@@ -1,36 +1,35 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/styles';
-import Typography from '@material-ui/core/Typography';
+import { styled } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
 import PaperContainer from '../components/PaperContainer';
 import PlanEdit from '../components/PlanEdit';
 import { useApi } from '../providers/Api';
 
-const useStyles = makeStyles((theme) => ({
-  title: {
+const Title = styled(Typography)(
+  ({ theme }) => ({
     paddingBottom: theme.spacing(2)
-  }
-}));
+  })
+);
 
 const NewPlanPage = (props) => {
-  const history = useHistory();
-  const classes = useStyles();
+  const navigate = useNavigate();
   const { postRequest } = useApi();
 
-	const addPlan = async plan => {
-		const requestBody = {name: plan.name, meatId: plan.meatId, private: plan.isPrivate};
-		const createdPlan = await postRequest(`/plans`, requestBody);
-		history.push(`/editPlan/${createdPlan.id}`);
-	}
+  const addPlan = async plan => {
+    const requestBody = { name: plan.name, meatId: plan.meatId, private: plan.isPrivate };
+    const createdPlan = await postRequest(`/plans`, requestBody);
+    navigate(`/editPlan/${createdPlan.id}`);
+  }
 
-	return (
+  return (
     <PaperContainer>
-      <Typography className={classes.title} variant='h6'>
+      <Title variant='h6'>
         Create a New Plan
-      </Typography>
+      </Title>
       <PlanEdit onPlanSubmit={addPlan} />
     </PaperContainer>
-	);
+  );
 };
 
 export default NewPlanPage;
