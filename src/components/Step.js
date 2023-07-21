@@ -1,36 +1,22 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import TextField from '@material-ui/core/TextField';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@mui/material/IconButton';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import ReactMarkdown from 'react-markdown';
-
-const useStyles = makeStyles(theme => ({
-  editActionInput: {
-    width: '100%'
-  },
-  tableAction: {
-    width: theme.spacing(10)
-  },
-  tableIcon: {
-    padding: 0
-  }
-}));
 
 const Step = props => {
   const { step, deleteStep, editStep } = props;
   const [actionEdit, setActionEdit] = useState(step.action);
   const [editing, setEditing] = useState(false);
-  const classes = useStyles();
 
   const submitStepEdit = () => {
     setEditing(false);
-    editStep({...step, action: actionEdit});
+    editStep({ ...step, action: actionEdit });
   };
 
   const cancelStepEdit = () => {
@@ -42,10 +28,10 @@ const Step = props => {
     if (editing) {
       return (
         <div>
-          <IconButton className={classes.tableIcon} onClick={(ev) => submitStepEdit()}>
+          <IconButton sx={{ padding: 0 }} onClick={(ev) => submitStepEdit()}>
             <CheckIcon />
           </IconButton>
-          <IconButton className={classes.tableIcon} onClick={(ev) => cancelStepEdit()}>
+          <IconButton sx={{ padding: 0 }} onClick={(ev) => cancelStepEdit()}>
             <CloseIcon />
           </IconButton>
         </div>
@@ -53,37 +39,37 @@ const Step = props => {
     } else {
       return (
         <div>
-          {editStep ? 
-          <IconButton className={classes.tableIcon} onClick={(ev) => setEditing(true)}>
-            <EditIcon />
-          </IconButton> : 
-          ''}
-          {deleteStep ? 
-          <IconButton className={classes.tableIcon} onClick={(ev) => deleteStep(step.id)}>
-            <DeleteIcon />
-          </IconButton> : 
-          ''}
+          {editStep ?
+            <IconButton sx={{ padding: 0 }} onClick={(ev) => setEditing(true)}>
+              <EditIcon />
+            </IconButton> :
+            ''}
+          {deleteStep ?
+            <IconButton sx={{ padding: 0 }} onClick={(ev) => deleteStep(step.id)}>
+              <DeleteIcon />
+            </IconButton> :
+            ''}
         </div>
       );
     }
   }
 
-	return (
+  return (
     <TableRow key={step.id}>
       <TableCell component="th" scope="row">
         {
-          editing ? 
-          <TextField 
-            className={classes.editActionInput}
-            defaultValue={step.action}
-            onChange={e => setActionEdit(e.target.value)} 
-            multiline
-            size='small'
-            variant='outlined'/> : 
-          <ReactMarkdown source={step.action} escapeHtml={false} />
+          editing ?
+            <TextField
+              sx={{ width: '100%' }}
+              defaultValue={step.action}
+              onChange={e => setActionEdit(e.target.value)}
+              multiline
+              size='small'
+              variant='outlined' /> :
+            <ReactMarkdown source={step.action} escapeHtml={false} />
         }
       </TableCell>
-      <TableCell className={classes.tableAction}>
+      <TableCell sx={(theme) => ({ width: theme.spacing(10) })}>
         {getTableActionButtons()}
       </TableCell>
     </TableRow>

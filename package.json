@@ -9,21 +9,23 @@
   },
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.8.1",
-    "@material-ui/core": "^4.9.14",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/styles": "^4.9.14",
-    "chart.js": "^2.9.3",
-    "history": "^4.10.1",
-    "marked": "^1.1.0",
-    "moment": "^2.26.0",
-    "qs": "^6.9.4",
-    "react": "^16.13.1",
-    "react-chartjs-2": "^2.9.0",
-    "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "@auth0/auth0-react": "^2.2.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.1",
+    "@mui/material": "^5.14.1",
+    "@mui/system": "^5.14.1",
+    "chart.js": "^4.3.0",
+    "history": "^5.3.0",
+    "marked": "^5.1.1",
+    "moment": "^2.29.4",
+    "qs": "^6.11.2",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.7",
+    "react-router-dom": "^6.14.2",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,5 +48,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/plugin-syntax-flow": "^7.22.5",
+    "@babel/plugin-transform-react-jsx": "^7.22.5",
+    "@types/react": "^18.2.15",
+    "typescript": "^5.1.6"
   }
 }

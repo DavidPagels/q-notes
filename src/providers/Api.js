@@ -1,21 +1,21 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useAuth0 } from './Auth0';
+import { useAuth0 } from '@auth0/auth0-react';
 
 let API_HOST;
 export const ApiContext = React.createContext();
 export const useApi = () => useContext(ApiContext);
 
-export const ApiProvider = ({children, apiHost}) => {
+export const ApiProvider = ({ children, apiHost }) => {
   API_HOST = apiHost;
   const [fetching, setFetching] = useState(false);
   const [userSettings, setUserSettings] = useState({});
-  const { isAuthenticated, getTokenSilently, user } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
   const getRequest = (path) => {
     path = isAuthenticated ? path : `/public${path}`;
     return apiRequest(path);
   };
-  
+
   const postRequest = (path, body) => {
     const opts = {
       method: 'POST',
@@ -26,7 +26,7 @@ export const ApiProvider = ({children, apiHost}) => {
     };
     return apiRequest(path, opts);
   };
-  
+
   const putRequest = (path, body) => {
     const opts = {
       method: 'PUT',
@@ -37,19 +37,19 @@ export const ApiProvider = ({children, apiHost}) => {
     };
     return apiRequest(path, opts);
   };
-  
+
   const deleteRequest = path => {
     const opts = {
       method: 'DELETE'
     };
     return apiRequest(path, opts);
   };
-  
+
   const apiRequest = async (path, opts = {}) => {
     setFetching(true);
     try {
-      const token = await getTokenSilently();
-      opts.headers = {...opts.headers, 'Authorization': `Bearer ${token}`};
+      const token = await getAccessTokenSilently();
+      opts.headers = { ...opts.headers, 'Authorization': `Bearer ${token}` };
     } catch (e) {
       console.log('caught auth error')
       // Allow unauthorized get requests
@@ -57,7 +57,7 @@ export const ApiProvider = ({children, apiHost}) => {
         throw e;
       }
     }
-  
+
     let response;
     try {
       response = await fetch(`${API_HOST}${path}`, opts);
@@ -65,7 +65,7 @@ export const ApiProvider = ({children, apiHost}) => {
         return await response.json();
       }
     } catch (e) {
-      console.error(JSON.stringify({message: `Error making ${opts.method || 'GET'} ${path} request`, error: e ? e.message : {}}));
+      console.error(JSON.stringify({ message: `Error making ${opts.method || 'GET'} ${path} request`, error: e ? e.message : {} }));
     } finally {
       setFetching(false);
     }
@@ -81,7 +81,7 @@ export const ApiProvider = ({children, apiHost}) => {
   };
 
   useEffect(() => {
-    if(isAuthenticated && user) {
+    if (isAuthenticated && user) {
       updateUserSettings();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

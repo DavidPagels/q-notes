@@ -1,23 +1,15 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
 import Step from './Step';
-
-const useStyles = makeStyles(theme => ({
-  table: {
-    width: '100%'
-  }
-}));
 
 const StepList = props => {
   const { steps, deleteStep, editStep } = props;
-  const classes = useStyles();
 
-	return (
+  return (
     <TableContainer>
-      <Table className={classes.table} size='small'>
+      <Table sx={{ width: '100%' }} size='small'>
         <TableBody>
           {steps.map((step) => <Step key={step.id} editStep={editStep} deleteStep={deleteStep} step={step} />)}
         </TableBody>

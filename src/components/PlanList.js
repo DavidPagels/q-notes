@@ -1,73 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useApi } from '../providers/Api';
 import * as qs from 'qs';
 import * as moment from 'moment';
 
-const useStyles = makeStyles(theme => ({
-  meatSelect: {
-    marginTop: -theme.spacing(2),
-    minWidth: theme.spacing(20)
-  },
-  meatType: {
-    textTransform: 'capitalize'
-  },
-  table: {
-    minWidth: 650
-  },
-  tableButton: {
-    padding: 0
-  },
-  title: {
-    flex: '1 1 100%',
-  }
-}));
-
 const PlanList = (props) => {
-	const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { getRequest } = useApi();
-  
-	const [plans, setPlans] = useState([]);
-	const [opts, setOpts] = useState({})
+
+  const [plans, setPlans] = useState([]);
+  const [opts, setOpts] = useState({})
   const [totalHits, setTotalHits] = React.useState(0);
 
-	const getPlans = async () => {
+  const getPlans = async () => {
 
-		const results = await getRequest(`/plans${history.location.search}`) || {};
+    const results = await getRequest(`/plans${location.search}`) || {};
 
-    setOpts(qs.parse(history.location.search, { ignoreQueryPrefix: true }));
+    setOpts(qs.parse(location.search, { ignoreQueryPrefix: true }));
     setPlans(results.records || []);
     setTotalHits(results.totalHits || 0);
-	}
+  }
 
-	useEffect(() => {
-		getPlans();
+  useEffect(() => {
+    getPlans();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [history.location]);
+  }, [location]);
 
   const updatePage = options => {
-    history.push({
-      pathname: history.location.pathname, 
+    navigate({
+      pathname: location.pathname,
       search: `?${qs.stringify(options)}`
     });
   };
@@ -86,32 +66,35 @@ const PlanList = (props) => {
     return () => {
       const isAsc = opts.sortBy && opts.sortBy.endsWith(columnName) && !opts.sortBy.startsWith('-')
 
-      const newOpts = {...opts, page: 1, sortBy: `${isAsc ? '-' : ''}${columnName}`};
+      const newOpts = { ...opts, page: 1, sortBy: `${isAsc ? '-' : ''}${columnName}` };
       updatePage(newOpts);
     };
   };
 
-	const handleChangePage = (ev, newPage) => {
-    const newOpts = {...opts, page: newPage + 1};
+  const handleChangePage = (ev, newPage) => {
+    const newOpts = { ...opts, page: newPage + 1 };
     updatePage(newOpts);
   };
 
   const handleChangeRowsPerPage = ev => {
-    const newOpts = {...opts, page: 1, pageSize: parseInt(ev.target.value, 10)};
+    const newOpts = { ...opts, page: 1, pageSize: parseInt(ev.target.value, 10) };
     updatePage(newOpts);
   };
 
   const goToPlanPage = planId => {
-    history.push(`/plans/${planId}`);
+    navigate(`/plans/${planId}`);
   };
 
-	return (
-		<div>
-      <Toolbar className={classes.toolbar}>
-        <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
+  return (
+    <div>
+      <Toolbar>
+        <Typography sx={{ flex: '1 1 100%' }} variant='h6' id='tableTitle' component='div'>
           Smoking Plans
         </Typography>
-        <FormControl className={classes.meatSelect}>
+        <FormControl sx={(theme) => ({
+          marginTop: -theme.spacing(2),
+          minWidth: theme.spacing(20)
+        })}>
           <InputLabel>Meat Category</InputLabel>
           <Select value={Number(opts.meatId) || 0} onChange={handleMeatIdChange} label="Meat">
             <MenuItem value={0}>All</MenuItem>
@@ -126,47 +109,47 @@ const PlanList = (props) => {
             <MenuItem value={9}>Projects/Devices</MenuItem>
           </Select>
         </FormControl>
-        
-        <IconButton {...{to: `/newPlan`}} component={Link}>
+
+        <IconButton {...{ to: `/newPlan` }} component={Link}>
           <AddIcon />
         </IconButton>
       </Toolbar>
-      
-    	<TableContainer>
-    	  <Table className={classes.table} size='small'>
-    	    <TableHead>
-    	      <TableRow>
-    	        <TableCell>Name</TableCell>
-    	        <TableCell>User</TableCell>
+
+      <TableContainer>
+        <Table sx={{ minWidth: 650 }} size='small'>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>User</TableCell>
               <TableCell>Meat</TableCell>
-              <TableCell  sortDirection={opts.sortBy && opts.sortBy.endsWith('created') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc' ): false}>
+              <TableCell sortDirection={opts.sortBy && opts.sortBy.endsWith('created') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc') : false}>
                 <TableSortLabel
                   active={opts.sortBy && opts.sortBy.endsWith('created')}
-                  direction={opts.sortBy && opts.sortBy.endsWith('created') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc' ): 'asc'}
+                  direction={opts.sortBy && opts.sortBy.endsWith('created') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc') : 'asc'}
                   onClick={handleSortChange('created')}>
                   Created
                 </TableSortLabel>
               </TableCell>
-              <TableCell sortDirection={opts.sortBy && opts.sortBy.endsWith('updated') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc' ): false}>
+              <TableCell sortDirection={opts.sortBy && opts.sortBy.endsWith('updated') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc') : false}>
                 <TableSortLabel
                   active={opts.sortBy && opts.sortBy.endsWith('updated')}
-                  direction={opts.sortBy && opts.sortBy.endsWith('updated') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc' ): 'asc'}
+                  direction={opts.sortBy && opts.sortBy.endsWith('updated') ? (opts.sortBy.startsWith('-') ? 'desc' : 'asc') : 'asc'}
                   onClick={handleSortChange('updated')}>
                   Updated
                 </TableSortLabel>
               </TableCell>
-    	        <TableCell>Private</TableCell>
+              <TableCell>Private</TableCell>
               <TableCell> </TableCell>
-    	      </TableRow>
-    	    </TableHead>
-    	    <TableBody>
-    	      {plans.map((plan) => (
-    	        <TableRow key={plan.id} hover onClick={() => goToPlanPage(plan.id)}>
-    	          <TableCell>
-    	            {plan.name}
-    	          </TableCell>
-    	          <TableCell>{plan.userName || plan.userId}</TableCell>
-                <TableCell className={classes.meatType}>{plan.meatType}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {plans.map((plan) => (
+              <TableRow key={plan.id} hover onClick={() => goToPlanPage(plan.id)}>
+                <TableCell>
+                  {plan.name}
+                </TableCell>
+                <TableCell>{plan.userName || plan.userId}</TableCell>
+                <TableCell sx={{ textTransform: 'capitalize' }}>{plan.meatType}</TableCell>
                 <Tooltip title={moment(plan.created).format('YYYY-MM-DD h:mm a')}>
                   <TableCell>
                     {moment(plan.created).fromNow()}
@@ -177,26 +160,26 @@ const PlanList = (props) => {
                     {moment(plan.updated).fromNow()}
                   </TableCell>
                 </Tooltip>
-    	          <TableCell>{plan.private ? 'Yes' : 'No'}</TableCell>
+                <TableCell>{plan.private ? 'Yes' : 'No'}</TableCell>
                 <TableCell>
-                  <IconButton className={classes.tableButton} {...{to: `/plans/${plan.id}`}} component={Link}>
+                  <IconButton sx={{ padding: 0 }} {...{ to: `/plans/${plan.id}` }} component={Link}>
                     <VisibilityIcon />
                   </IconButton>
                 </TableCell>
-    	        </TableRow>
-    	      ))}
-    	    </TableBody>
-    	  </Table>
-    	</TableContainer>
-    	<TablePagination
-    		  rowsPerPageOptions={[10, 25, 50]}
-    		  component='div'
-    		  count={totalHits}
-    		  rowsPerPage={Number(opts.pageSize) || 10}
-    		  page={(Number(opts.page) || 1) - 1}
-    		  onChangePage={handleChangePage}
-    		  onChangeRowsPerPage={handleChangeRowsPerPage}
-    		/>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component='div'
+        count={totalHits}
+        rowsPerPage={Number(opts.pageSize) || 10}
+        page={(Number(opts.page) || 1) - 1}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
     </div>
   );
 };
